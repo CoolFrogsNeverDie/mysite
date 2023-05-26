@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--  이 공간에 있는 쿼리문들을 호출할 때 이름의 시작 -->
+<mapper namespace="user">
+
+	<!-- 쿼리문 작성 -->
+
+	<insert id = "insertUser" parameterType = "com.javaex.vo.UserVO">
+		<![CDATA[
+			insert into users 
+			values(seq_users_no.nextval,#{id},#{password},#{name},#{gender})
+		]]>
+	</insert>
+	
+	
+	<select id = "loginUser" parameterType = "com.javaex.vo.UserVO" resultType = "com.javaex.vo.UserVO">
+		<![CDATA[
+			select no,id,name
+				from users
+			where id = #{id} and password = #{password}
+		]]>
+	</select>
+	
+	
+	<update id = "updateUser" parameterType = "com.javaex.vo.UserVO">
+		<![CDATA[
+			update users set
+				password = #{password}
+				,name = #{name}
+				,gender = #{gender}
+			where no = #{no}
+		]]>
+	</update>
+	
+	
+	<select id = "getUserInfoByNum" parameterType = "int" resultType = "com.javaex.vo.UserVO">
+		<![CDATA[
+		select 	
+			no
+			,id
+			,password
+			,name
+			,gender 
+		from users
+		where no = #{no}
+		]]>
+	
+	</select>
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 이 공간에 있는 쿼리문들을 호출할 때 이름의 시작 -->
+<mapper namespace="board">
+
+	<select id="getBoardList" resultType="com.javaex.vo.BoardVO">
+		SELECT
+		a.no as no
+		,title
+		,name
+		,hit
+		,reg_date as regDate
+		,user_no as userNo
+		FROM board
+		a
+		JOIN users b ON a.user_no = b.no
+		order by no desc
+	</select>
+
+	<select id="getBoardByNum" parameterType="int"
+		resultType="com.javaex.vo.BoardVO">
+		select a.no as no
+			, title
+			, content
+			, hit
+			, reg_date regDate
+			, user_no as userNo
+			, name
+		from board a
+		JOIN users b 
+		on a.user_no = b.no 
+		where a.no = #{boardNum} 
+	</select>
+
+	<select id ="selectByTitle" parameterType ="String" resultType ="com.javaex.vo.BoardVO"> 
+			SELECT
+		a.no as no
+		,title
+		,name
+		,hit
+		,reg_date as regDate
+		,user_no as userNo
+		FROM board
+		a
+		JOIN users b ON a.user_no = b.no
+		where title like '%${value}%' 
+		order by no desc
+	</select>
+
+	<update id="hitCnt" parameterType="int">
+		update board set
+			hit = hit + 1
+		where no = #{no}
+	</update>
+
+	
+	<update id = "updateBoard" parameterType = "com.javaex.vo.BoardVO">
+		update board set
+   			title = #{title}
+    		,content = #{content}
+    	where no = #{no}
+	</update>
+	
+	<insert id ="insertBoard" parameterType = "com.javaex.vo.BoardVO">
+		insert into board (no, title, content, user_no)
+			values (seq_board_no.nextval
+        			,#{title}
+        			,#{content}
+        			,#{userNo})
+	</insert>
+	
+	<delete id = "deleteBoard" parameterType ="int">
+		delete board 
+		where no = #{no}
+	</delete>
+	
+	
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 이 공간에 있는 쿼리문들을 호출할 때 이름의 시작 -->
+<mapper namespace="guestbook">
+
+	<!-- 쿼리문 작성 -->
+	<insert id="insertGuestbook"
+		parameterType="com.javaex.vo.GuestbookVO">
+	<![CDATA[
+	insert into guestboard (num, author, write_date, password, content)
+    values (seq_guestbook_no.nextval
+    		, #{author}
+    		, sysdate
+    		, #{password}
+    		, #{content}
+    		)
+	]]>
+	</insert>
+
+	<select id="getGuestbookList" resultType="com.javaex.vo.GuestbookVO">
+		<![CDATA[
+		select 
+		num
+		,author
+		,write_date as regDate
+		,content 
+		from guestboard
+		order by num desc
+		]]>
+	</select>
+
+	<delete id = "deleteGuestbook" parameterType = "com.javaex.vo.GuestbookVO">
+		delete guestboard
+		where num = #{num} and password = #{password}
+	</delete>
+</mapper>
