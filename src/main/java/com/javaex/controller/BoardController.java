@@ -115,6 +115,7 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
+	//--------------------searchBoardByKeyword(no searchOption)------------ 
 	
 	@RequestMapping(value = "/search")
 	public String searchBoard(@RequestParam("keyword") String keyword, Model model){ 

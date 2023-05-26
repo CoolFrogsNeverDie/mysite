@@ -31,7 +31,7 @@ public class BoardDAO {
 	}
 	
 	
-	//---------------
+	//---------------getBoardByNum
 	
 	public BoardVO getBoardByNum(int boardNum) {
 		
@@ -39,14 +39,14 @@ public class BoardDAO {
 		return vo;
 	}
 	
-	//---------------
+	//---------------updateBoard
 
 	public int updateBoard(BoardVO boardVO) {  
 		int rows = sqlSession.update("board.updateBoard", boardVO);
 		return rows;
 	}
 	
-	//-----------------
+	//-----------------insert
 	
 	public int insertBoard(BoardVO boardVO) {  
 		int rows = sqlSession.insert("board.insertBoard", boardVO);

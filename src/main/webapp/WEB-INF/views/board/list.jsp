@@ -50,7 +50,7 @@
 				<div id="list">
 					<form action="${pageContext.request.contextPath}/board/search">
 						<div class="form-group text-right">
-							<input type="text" name = "keyword">
+							<input type="text" name="keyword">
 							<button type="submit" id=btn_search>검색</button>
 						</div>
 					</form>
@@ -69,12 +69,14 @@
 							<c:forEach items="${boardList}" var="board">
 								<tr>
 									<td>${board.no}</td>
-									<td class="text-left"><a href="${pageContext.request.contextPath}/board/readBoard/${board.no}">${board.title}</a></td>
+									<td class="text-left"><a
+										href="${pageContext.request.contextPath}/board/readBoard/${board.no}">${board.title}</a></td>
 									<td>${board.name}</td>
 									<td>${board.hit}</td>
 									<td>${board.regDate}</td>
 									<c:if test="${sessionScope.authUser.no == board.userNo}">
-										<td><a href="${pageContext.request.contextPath}/board/delete?no=${board.no}&userNo=${board.userNo}">[삭제]</a></td>
+										<td><a
+											href="${pageContext.request.contextPath}/board/delete?no=${board.no}&userNo=${board.userNo}">[삭제]</a></td>
 									</c:if>
 								</tr>
 							</c:forEach>
@@ -101,7 +103,8 @@
 						<div class="clear"></div>
 					</div>
 					<c:if test="${authUser != null}">
-						<a id="btn_write" href="${pageContext.request.contextPath}/board/writeForm">글쓰기</a>
+						<a id="btn_write"
+							href="${pageContext.request.contextPath}/board/writeForm">글쓰기</a>
 					</c:if>
 				</div>
 				<!-- //list -->
