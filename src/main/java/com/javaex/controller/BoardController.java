@@ -24,7 +24,7 @@ public class BoardController {
 	BoardService boardService;
 	
 	
-	//--------------BoardList
+	//--------------BoardList----------
 	
 	@RequestMapping(value ="/list" )
 	public String boardList(Model model) {  
