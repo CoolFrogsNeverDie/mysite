@@ -23,6 +23,8 @@ public class BoardDAO {
 		
 	}
 
+	//-----------------get Board List By PageNumber()
+	
 	public List<BoardVO> getBoardListByNum(PagingVO pagingVO){
 		
 		List<BoardVO> list = sqlSession.selectList("board.getBoardListByNum", pagingVO);
@@ -31,10 +33,11 @@ public class BoardDAO {
 		
 	}
 
+	//---------------totalBoard cnt
 	
 	public int getTotalCnt() {  
 		int totalCnt  = sqlSession.selectOne("board.getBoardCnt");
-		System.out.println("DAO에 전달된 총 Board 개수" + totalCnt);
+		
 		return totalCnt;
 	}
 	

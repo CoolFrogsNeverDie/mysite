@@ -50,8 +50,6 @@
 		from board
 	</select>
 
-
-
 	<select id="getBoardByNum" parameterType="int"
 		resultType="com.javaex.vo.BoardVO">
 		select a.no as no

@@ -1,5 +1,6 @@
 package com.javaex.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,18 +26,23 @@ public class BoardService {
 		return list;
 	}
 	
-	//BoardInfo
-	public Map<String, Object> getBoardInfo(int selectPage){  
+	//--------------------BoardPagingInfo
+	
+	public Map<String, Object> getBoardPagingInfo(int selectPage){  
 		PagingVO pagingVO = new PagingVO(selectPage,boardDAO.getTotalCnt());
 		boardDAO.getBoardListByNum(pagingVO);
 		List<BoardVO> list = boardDAO.getBoardListByNum(pagingVO);
-		System.out.println("Service of BoardInfo in Service");
-		System.out.println(pagingVO.toString());
-		System.out.println(list.toString());
 		
-		return null;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("pagingVO", pagingVO);
+		map.put("BoardList", list);
+		
+		
+		return map;
 	}
 	
+	
+	//-----------read Board ----------
 	
 	public BoardVO boardClickAction(int boardNum) {  
 		boardDAO.hitCnt(boardNum);

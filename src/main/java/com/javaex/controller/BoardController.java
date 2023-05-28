@@ -42,8 +42,9 @@ public class BoardController {
 	public String boardListByBoardNum(@PathVariable("no") int selectPage, Model model) {  
 		
 		//BoardList와 PagingVO 객체를 꺼내올 거임
-		Map<String, Object> pageInfo = boardService.getBoardInfo(selectPage);
-		System.out.println("boardByNum controller Start");
+		Map<String, Object> pageInfo = boardService.getBoardPagingInfo(selectPage);
+		model.addAttribute("pagingInfo", pageInfo.get("pagingVO"));
+		model.addAttribute("boardList", pageInfo.get("BoardList"));
 		
 		return "board/list";
 	}
