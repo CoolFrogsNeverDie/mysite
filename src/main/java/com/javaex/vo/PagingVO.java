@@ -26,16 +26,19 @@ public class PagingVO {
 		this.BoardNumEnd = getStartPage(selectPage)+4;
 		this.page = pageSize(selectPage);
 		this.oldPage = min(pageSize(selectPage));
-		this.nextPage = max(pageSize(selectPage));
+		this.nextPage = max(pageSize(selectPage),calculPage(selectPage,totalCnt));
 	}
 	
 	
-	private int max(int[] array) { 
+	private int max(int[] array, int maxPage) { 
 		int max=0;
 		for(int a : array) {
 			if(max < a) {
 				max=a;
 			}
+		}
+		if(max > maxPage) {
+			max= maxPage;
 		}
 		return max + 1;
 	}
@@ -43,12 +46,12 @@ public class PagingVO {
 	private int min(int[] array) { 
 		int min=0;
 		for(int a : array) {
-			if(min < a) {
+			if(min > a) {
 				min=a;
 			}
 		}
 		if(min<1) {
-			min = 1;
+			min = 2;
 		}
 		return min-1;
 	}

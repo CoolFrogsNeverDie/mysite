@@ -40,7 +40,8 @@
         From board a
         Join users b
         On a.user_no = b.no)
-    where rw between #{BoardNumStart} and #{BoardNumEnd}
+    	where rw between #{BoardNumStart} and #{BoardNumEnd}
+    	order by no desc
 	</select>
 
 
