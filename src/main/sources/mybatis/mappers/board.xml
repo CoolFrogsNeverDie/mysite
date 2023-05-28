@@ -6,17 +6,51 @@
 
 	<select id="getBoardList" resultType="com.javaex.vo.BoardVO">
 		SELECT
-		a.no as no
-		,title
-		,name
-		,hit
-		,reg_date as regDate
-		,user_no as userNo
-		FROM board
-		a
-		JOIN users b ON a.user_no = b.no
+			a.no as no
+			,title
+			,name
+			,hit
+			,reg_date as regDate
+			,user_no as userNo
+		FROM board a
+		JOIN users b
+		ON a.user_no = b.no
 		order by no desc
 	</select>
+
+	<select id="getBoardListByNum"
+		parameterType="com.javaex.vo.PagingVO"
+		resultType="com.javaex.vo.BoardVO">
+	select
+   	 	no
+    	,title
+   		,name
+    	,hit
+   	 	,regDate
+    	,userNO
+    from ( 
+        Select
+            a.No as no
+            ,title
+            ,name
+            ,hit
+            ,reg_date as regDate
+            ,user_no as userNo
+            ,rownum as rw
+        From board a
+        Join users b
+        On a.user_no = b.no)
+    where rw between #{BoardNumStart} and #{BoardNumEnd}
+	</select>
+
+
+	<select id="getBoardCnt" resultType="int">
+		select
+			count(rownum)
+		from board
+	</select>
+
+
 
 	<select id="getBoardByNum" parameterType="int"
 		resultType="com.javaex.vo.BoardVO">
@@ -28,23 +62,25 @@
 			, user_no as userNo
 			, name
 		from board a
-		JOIN users b 
-		on a.user_no = b.no 
-		where a.no = #{boardNum} 
+		JOIN users b
+		on a.user_no = b.no
+		where a.no = #{boardNum}
 	</select>
 
-	<select id ="selectByTitle" parameterType ="String" resultType ="com.javaex.vo.BoardVO"> 
-			SELECT
-		a.no as no
-		,title
-		,name
-		,hit
-		,reg_date as regDate
-		,user_no as userNo
-		FROM board
+	<select id="selectByTitle" parameterType="String"
+		resultType="com.javaex.vo.BoardVO">
+		SELECT
+			a.no as no
+			,title
+			,name
+			,hit
+			,reg_date as regDate
+			,user_no as userNo
+		FROM
+		board
 		a
 		JOIN users b ON a.user_no = b.no
-		where title like '%${value}%' 
+		where title like '%${value}%'
 		order by no desc
 	</select>
 
@@ -54,26 +90,27 @@
 		where no = #{no}
 	</update>
 
-	
-	<update id = "updateBoard" parameterType = "com.javaex.vo.BoardVO">
+
+	<update id="updateBoard" parameterType="com.javaex.vo.BoardVO">
 		update board set
-   			title = #{title}
-    		,content = #{content}
-    	where no = #{no}
+			title = #{title}
+			,content = #{content}
+		where no = #{no}
 	</update>
-	
-	<insert id ="insertBoard" parameterType = "com.javaex.vo.BoardVO">
-		insert into board (no, title, content, user_no)
+
+	<insert id="insertBoard" parameterType="com.javaex.vo.BoardVO">
+		insert into board (no,
+		title, content, user_no)
 			values (seq_board_no.nextval
-        			,#{title}
-        			,#{content}
-        			,#{userNo})
+			,#{title}
+			,#{content}
+			,#{userNo})
 	</insert>
-	
-	<delete id = "deleteBoard" parameterType ="int">
-		delete board 
+
+	<delete id="deleteBoard" parameterType="int">
+		delete board
 		where no = #{no}
 	</delete>
-	
-	
+
+
 </mapper>

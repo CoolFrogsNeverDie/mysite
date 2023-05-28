@@ -1,12 +1,14 @@
 package com.javaex.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.javaex.dao.BoardDAO;
 import com.javaex.vo.BoardVO;
+import com.javaex.vo.PagingVO;
 
 @Service
 public class BoardService {
@@ -22,6 +24,19 @@ public class BoardService {
 		
 		return list;
 	}
+	
+	//BoardInfo
+	public Map<String, Object> getBoardInfo(int selectPage){  
+		PagingVO pagingVO = new PagingVO(selectPage,boardDAO.getTotalCnt());
+		boardDAO.getBoardListByNum(pagingVO);
+		List<BoardVO> list = boardDAO.getBoardListByNum(pagingVO);
+		System.out.println("Service of BoardInfo in Service");
+		System.out.println(pagingVO.toString());
+		System.out.println(list.toString());
+		
+		return null;
+	}
+	
 	
 	public BoardVO boardClickAction(int boardNum) {  
 		boardDAO.hitCnt(boardNum);

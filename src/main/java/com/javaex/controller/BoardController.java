@@ -1,6 +1,7 @@
 package com.javaex.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -24,7 +25,7 @@ public class BoardController {
 	BoardService boardService;
 	
 	
-	//--------------BoardList----------
+	//--------------BoardList----------아무것도 선택하지 않았을 때의 BoardList
 	
 	@RequestMapping(value ="/list" )
 	public String boardList(Model model) {  
@@ -32,6 +33,18 @@ public class BoardController {
 		
 		List <BoardVO> list = boardService.getBoardList();
 		model.addAttribute("boardList", list);
+		return "board/list";
+	}
+	
+	//--------------BoardListByPageNum --------페이지 선택 시 보이는 BoardList
+	
+	@RequestMapping(value = "/list/{no}")
+	public String boardListByBoardNum(@PathVariable("no") int selectPage, Model model) {  
+		
+		//BoardList와 PagingVO 객체를 꺼내올 거임
+		Map<String, Object> pageInfo = boardService.getBoardInfo(selectPage);
+		System.out.println("boardByNum controller Start");
+		
 		return "board/list";
 	}
 	

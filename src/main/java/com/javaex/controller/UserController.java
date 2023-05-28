@@ -21,7 +21,7 @@ public class UserController {
 	private UserService userService;
 	
 	
-	//------------------user joinForm----------------------------------------------
+	//------------------user joinForm---------------------------------------------------
 	
 	
 	@RequestMapping(value = "/joinForm" , method = RequestMethod.GET)
@@ -112,7 +112,6 @@ public class UserController {
 		
 		return "redirect:/user/modifyForm";
 	}
-	
 	
 	
 	

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.javaex.vo.BoardVO;
+import com.javaex.vo.PagingVO;
 
 @Repository
 public class BoardDAO {
@@ -20,6 +21,21 @@ public class BoardDAO {
 		
 		return list;
 		
+	}
+
+	public List<BoardVO> getBoardListByNum(PagingVO pagingVO){
+		
+		List<BoardVO> list = sqlSession.selectList("board.getBoardListByNum", pagingVO);
+		
+		return list;
+		
+	}
+
+	
+	public int getTotalCnt() {  
+		int totalCnt  = sqlSession.selectOne("board.getBoardCnt");
+		System.out.println("DAO에 전달된 총 Board 개수" + totalCnt);
+		return totalCnt;
 	}
 	
 	//---------------조회수 올리는 DAO
