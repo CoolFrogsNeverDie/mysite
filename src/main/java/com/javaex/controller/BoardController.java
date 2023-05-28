@@ -25,7 +25,7 @@ public class BoardController {
 	BoardService boardService;
 	
 	
-	//--------------BoardList----------아무것도 선택하지 않았을 때의 BoardList
+	//--------------BoardList----------아무것도 선택하지 않았을 때의 BoardList 삭제 예정
 	
 	@RequestMapping(value ="/list" )
 	public String boardList(Model model) {  
