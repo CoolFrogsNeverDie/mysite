@@ -11,8 +11,8 @@ public class PagingVO {
 	private int BoardNumEnd; //해당 페이지에서 보여질 게시글의 마지막 rownum
 	private final int VIEW_PAGE = 5; //한 페이지당 노출될 글의 수
 	private int[] page = new int[10]; //나열될 page Number 배열
-	private int oldPage;
-	private int nextPage;
+	private int oldPage; //이전 페이지 뷰로 이동
+	private int nextPage; //다음 페이지 뷰로 이동
 	
 	public PagingVO() {
 		super();
@@ -22,47 +22,55 @@ public class PagingVO {
 		this.selectPage = selectPage;
 		this.totalCnt = totalCnt;
 		this.finalPage = calculPage(selectPage,totalCnt);
-		this.BoardNumStart = getStartPage(selectPage);
-		this.BoardNumEnd = getStartPage(selectPage)+4;
+		this.BoardNumStart = getStartBoardNum(selectPage, totalCnt);
+		this.BoardNumEnd = getEndBoardNum(selectPage,totalCnt);
 		this.page = pageSize(selectPage);
-		this.oldPage = min(pageSize(selectPage));
-		this.nextPage = max(pageSize(selectPage),calculPage(selectPage,totalCnt));
+		this.oldPage = getOldPage(pageSize(selectPage));
+		this.nextPage = getNextPage(pageSize(selectPage),calculPage(selectPage,totalCnt));
 	}
 	
 	
-	private int max(int[] array, int maxPage) { 
-		int max=0;
+	//---------다음페이지 '>' 값 계산
+	
+	private int getNextPage(int[] array, int maxPage) { 
+		int NextPage=0;
 		for(int a : array) {
-			if(max < a) {
-				max=a;
+			if(NextPage < a) {
+				NextPage=a;//배열에서 가장 큰 값 얻어오기
+			}
+			NextPage+=1;
+		}
+		if(NextPage > maxPage) { //마지막 페이지보다 다음페이지 값이 더 크면?
+			NextPage= maxPage; //마지막 페이지값을 max에 할당함
+		}
+		return NextPage; //
+	}
+	
+	//---------이전 페이지 '<' 값 계산
+	
+	private int getOldPage(int[] array) { 
+		int oldPage=0;
+		for(int a : array) {
+			if(oldPage > a) {
+				oldPage=a;
 			}
 		}
-		if(max > maxPage) {
-			max= maxPage;
+		if(oldPage<1) {
+			oldPage = 2;
 		}
-		return max + 1;
+		return oldPage-1;
 	}
 	
-	private int min(int[] array) { 
-		int min=0;
-		for(int a : array) {
-			if(min > a) {
-				min=a;
-			}
-		}
-		if(min<1) {
-			min = 2;
-		}
-		return min-1;
-	}
+	
+	//---------나열될 번호 인덱스 배열로 생성
 	
 	public int[] pageSize(int selectPage) { 
 		int[] array = new int[10];
 		
-		if(selectPage <=10) {
+		if(selectPage <=10) { //선택한 페이지가 10 이하면 1~10까지
 			for(int i = 0; i<10; i++)
 			array[i] = i+1;
-		}else { 
+		}else { //선택한 페이지가 11이상이면~
 			int listNum = ((selectPage/10)*10)+1;
 			for(int i = 0; i<10; i++)
 				array[i] = listNum++;			
@@ -70,14 +78,30 @@ public class PagingVO {
 		return array;
 	}
 	
+	//---------마지막 페이지 계산
+	
 	private int calculPage(int selectPage, int totalCnt) {
-		int finalPage = (int)(Math.ceil((double)(totalCnt/VIEW_PAGE)+1));
+		int finalPage = (int)(Math.ceil((double)totalCnt/VIEW_PAGE));
 		return finalPage;
 	}
 	
-	private int getStartPage(int selectPage) {  
-		return (selectPage - 1) * 5 + 1;
+	//---------해당 페이지에서 시작되는 board의 rownum	
+	
+	private int getStartBoardNum(int selectPage, int totalCnt) {
+		return totalCnt - (VIEW_PAGE *(selectPage -1));
 	}
+	
+	//---------해당 페이지에서 끝나는 board의 rownum	
+
+	private int getEndBoardNum(int selectPage, int totalCnt) { 
+		int startPage = getStartBoardNum(selectPage, totalCnt);
+		int endPage = startPage -4; //시작 페이지 -4
+		if(endPage <0) { //지만~ endPage가 0이하면 rownum 1로 설정
+			endPage = 1;
+		}
+		return endPage;
+	}
+
 
 	public int getSelectPage() {
 		return selectPage;

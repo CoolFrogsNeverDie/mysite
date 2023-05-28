@@ -110,7 +110,7 @@ public class BoardController {
 		boardService.writeBoard(boardVO);
 		System.out.println(boardVO);
 		System.out.println("write Controller!");
-		return "redirect:/board/list";
+		return "redirect:/board/list/1";
 	}
 	
 	//------------Board delete--------------------------
@@ -126,7 +126,7 @@ public class BoardController {
 			}
 		}
 
-		return "redirect:/board/list";
+		return "redirect:/board/list/1";
 	}
 	
 	//--------------------searchBoardByKeyword(no searchOption)------------ 
@@ -136,7 +136,7 @@ public class BoardController {
 		System.out.println("검색 :" + keyword);
 		List<BoardVO> searchBoard = boardService.searchBoard(keyword);
 		model.addAttribute("boardList", searchBoard);
-		return "board/list";
+		return "board/list/1";
 	}
 	
 }

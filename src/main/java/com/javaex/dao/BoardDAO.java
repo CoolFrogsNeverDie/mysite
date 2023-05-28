@@ -15,6 +15,9 @@ public class BoardDAO {
 	@Autowired
 	SqlSession sqlSession;
 	
+	
+	//-----------------all boardList
+	
 	public List<BoardVO> getBoardList(){
 		
 		List<BoardVO> list = sqlSession.selectList("board.getBoardList");

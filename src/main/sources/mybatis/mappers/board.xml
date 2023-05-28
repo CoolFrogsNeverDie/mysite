@@ -21,27 +21,27 @@
 	<select id="getBoardListByNum"
 		parameterType="com.javaex.vo.PagingVO"
 		resultType="com.javaex.vo.BoardVO">
-	select
-   	 	no
-    	,title
-   		,name
-    	,hit
-   	 	,regDate
-    	,userNO
-    from ( 
-        Select
-            a.No as no
-            ,title
-            ,name
-            ,hit
-            ,reg_date as regDate
-            ,user_no as userNo
-            ,rownum as rw
-        From board a
-        Join users b
-        On a.user_no = b.no)
-    	where rw between #{BoardNumStart} and #{BoardNumEnd}
-    	order by no desc
+			SELECT rw, no, title
+			FROM (
+    			SELECT rw, no, title
+   				FROM (
+        			SELECT rownum as rw, a.no as no, title
+        				FROM (
+            					SELECT
+             					   a.no as no
+               					   ,title
+                				   ,name
+                				   ,hit
+               					   ,reg_date as regDate
+                				   ,user_no as userNo
+            					FROM board a
+            					JOIN users b ON a.user_no = b.no
+            					ORDER BY no
+        					) a
+    				 )		
+    				WHERE rw BETWEEN #{BoardNumEnd} AND #{BoardNumStart}
+				)
+			ORDER BY rw DESC
 	</select>
 
 

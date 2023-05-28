@@ -80,7 +80,7 @@
 							<textarea id="txt-content" name = "content">${modifyBoard.content}</textarea>
 						</div>
 						
-						<a id="btn_cancel" href="">취소</a>
+						<a id="btn_cancel" href="${pageContext.request.contextPath}/board/readBoard/${modifyBoard.no}">취소</a>
 						<button id="btn_modify" type="submit">수정</button>
 						
 					</form>

@@ -87,7 +87,7 @@
 						<ul>
 							<li><a href="${pageContext.request.contextPath}/board/list/${pagingInfo.oldPage}">◀</a></li>
 							<c:forEach items="${pagingInfo.page}" var="num">
-								<c:if test = "${num <= pagingInfo.finalPage}">
+								<c:if test = "${num <=  pagingInfo.finalPage}">
 									<li><a href="${pageContext.request.contextPath}/board/list/${num}">${num}</a></li>
 								</c:if>
 							</c:forEach>

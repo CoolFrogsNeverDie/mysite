@@ -17,6 +17,9 @@ public class BoardService {
 	@Autowired
 	BoardDAO boardDAO;
 	
+	
+	//---------------------All board List
+	
 	public List<BoardVO> getBoardList(){
 	
 		System.out.println("boardList Service");
