@@ -21,11 +21,11 @@
 	<select id="getBoardListByNum"
 		parameterType="com.javaex.vo.PagingVO"
 		resultType="com.javaex.vo.BoardVO">
-			SELECT rw, no, title
+			SELECT rw, no, title, name, hit, regDate
 			FROM (
-    			SELECT rw, no, title
+    			SELECT rw, no, title, name, hit, regDate
    				FROM (
-        			SELECT rownum as rw, a.no as no, title
+        			SELECT rownum as rw, a.no as no, title, name, hit, regDate
         				FROM (
             					SELECT
              					   a.no as no
