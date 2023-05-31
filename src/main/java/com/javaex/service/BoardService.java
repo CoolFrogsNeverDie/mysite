@@ -33,14 +33,19 @@ public class BoardService {
 	
 	public Map<String, Object> getBoardPagingInfo(int selectPage){  
 		PagingVO pagingVO = new PagingVO(selectPage,boardDAO.getTotalCnt());
-		boardDAO.getBoardListByNum(pagingVO);
-		List<BoardVO> list = boardDAO.getBoardListByNum(pagingVO);
+		//paging 객체 생성함
+		//객체 생성자로 알아서 페이징에 필요한 정보들 구성
+		
+		List<BoardVO> list = boardDAO.getBoardListByNum(pagingVO); //List로 원하는 정보 리스트 받아옴
+		
+		System.out.println("vo 객체 값 : " + pagingVO ); //vo객체 값 확인
 		
 		Map<String, Object> map = new HashMap<String, Object>();
+		//맵에다가 담아
 		map.put("pagingVO", pagingVO);
 		map.put("BoardList", list);
 		
-		
+		//맵으로 넘겨
 		return map;
 	}
 	

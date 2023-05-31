@@ -21,7 +21,7 @@
 	<select id="getBoardListByNum"
 		parameterType="com.javaex.vo.PagingVO"
 		resultType="com.javaex.vo.BoardVO">
-			SELECT rw, no, title, name, hit, regDate
+			SELECT no, title, name, hit, regDate
 			FROM (
     			SELECT rw, no, title, name, hit, regDate
    				FROM (
@@ -36,12 +36,12 @@
                 				   ,user_no as userNo
             					FROM board a
             					JOIN users b ON a.user_no = b.no
-            					ORDER BY no
+            					ORDER BY no desc
         					) a
     				 )		
-    				WHERE rw BETWEEN #{BoardNumEnd} AND #{BoardNumStart}
+    				WHERE rw BETWEEN #{boardNumStart} AND #{boardNumEnd}
 				)
-			ORDER BY rw DESC
+			ORDER BY no desc
 	</select>
 
 
@@ -79,7 +79,7 @@
 		board
 		a
 		JOIN users b ON a.user_no = b.no
-		where title like '%${value}%'
+		where title like '%'|| #{keyword} ||'%'
 		order by no desc
 	</select>
 

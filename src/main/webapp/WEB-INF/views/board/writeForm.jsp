@@ -16,18 +16,10 @@
 	<div id="wrap">
 
 		<c:import url="/WEB-INF/views/include/header.jsp"></c:import>
-		
 		<!-- //header -->
 		<c:import url ="/WEB-INF/views/include/nav.jsp"/>
 		<!-- //nav -->
-
-		<div id="aside">
-			<h2>게시판</h2>
-			<ul>
-				<li><a href="">일반게시판</a></li>
-				<li><a href="">댓글게시판</a></li>
-			</ul>
-		</div>
+		<c:import url="/WEB-INF/views/include/aside.jsp" />
 		<!-- //aside -->
 
 
@@ -52,12 +44,12 @@
 						<!-- 제목 -->
 						<div class="form-group">
 							<label class="form-text" for="txt-title">제목</label>
-							<input type="text" id="txt-title" name="title" placeholder="제목을 입력해 주세요">
+							<input type="text" id="txt-title" name="title" placeholder="제목을 입력해 주세요" required>
 						</div>
 					
 						<!-- 내용 -->
 						<div class="form-group">
-							<textarea id="txt-content" name = "content"></textarea>
+							<textarea id="txt-content" name = "content" required></textarea>
 						</div>
 						
 						<a id="btn_cancel" href="">취소</a>

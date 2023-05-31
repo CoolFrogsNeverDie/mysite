@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.javaex.service.BoardService;
 import com.javaex.vo.BoardVO;
+import com.javaex.vo.PagingVO;
 import com.javaex.vo.UserVO;
 
 @RequestMapping("/board")
@@ -25,25 +26,29 @@ public class BoardController {
 	BoardService boardService;
 	
 	
-	//--------------BoardList----------아무것도 선택하지 않았을 때의 BoardList 삭제 예정
-	
-	@RequestMapping(value ="/list" )
-	public String boardList(Model model) {  
-		System.out.println("boardList controller");
-		
-		List <BoardVO> list = boardService.getBoardList();
-		model.addAttribute("boardList", list);
-		return "board/list";
-	}
-	
+//	//--------------BoardList----------아무것도 선택하지 않았을 때의 BoardList 삭제 예정
+//	
+//	@RequestMapping(value ="/list" )
+//	public String boardList(Model model) {  
+//		System.out.println("boardList controller");
+//		
+//		List <BoardVO> list = boardService.getBoardList();
+//		model.addAttribute("boardList", list);
+//		return "board/list";
+//	}
+//	
 	//--------------BoardListByPageNum --------페이지 선택 시 보이는 BoardList
 	
 	@RequestMapping(value = "/list/{no}")
 	public String boardListByBoardNum(@PathVariable("no") int selectPage, Model model) {  
 		
+		
 		//BoardList와 PagingVO 객체를 꺼내올 거임
 		Map<String, Object> pageInfo = boardService.getBoardPagingInfo(selectPage);
-		model.addAttribute("pagingInfo", pageInfo.get("pagingVO"));
+		PagingVO vo = (PagingVO) pageInfo.get("pagingVO");
+		System.out.println("넘어온 객체 in controller" +  vo.toString());
+
+		model.addAttribute("paging", vo);
 		model.addAttribute("boardList", pageInfo.get("BoardList"));
 		
 		return "board/list";
@@ -85,7 +90,7 @@ public class BoardController {
 		
 		System.out.println(boardVO);
 		boardService.modifyBoard(boardVO);
-		return "redirect:/board/list";
+		return "redirect:/board/list/1";
 	}
 	
 	//-----------Board InsertForm --------------------------
@@ -136,7 +141,7 @@ public class BoardController {
 		System.out.println("검색 :" + keyword);
 		List<BoardVO> searchBoard = boardService.searchBoard(keyword);
 		model.addAttribute("boardList", searchBoard);
-		return "board/list/1";
+		return "board/list";
 	}
 	
 }
