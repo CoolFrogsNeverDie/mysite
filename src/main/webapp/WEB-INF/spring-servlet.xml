@@ -19,6 +19,7 @@
 	 -->
     <!--Handler Mapping 이 찾아다닐 범위 지정!! 이 안에서 찾아 다녀라!!-->
 	<context:component-scan base-package="com.javaex.controller" />
+	<context:component-scan base-package="com.javaex.api.controller" />
 
 	<!-- 기본 뷰 리졸버 설정--> 
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
@@ -32,6 +33,18 @@
 	<mvc:default-servlet-handler />
 	<mvc:annotation-driven />
 
+  <mvc:annotation-driven>
+      <mvc:message-converters>
+         <bean
+            class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+            <property name="supportedMediaTypes">
+               <list>
+                  <value>application/json; charset=UTF-8</value>
+               </list>
+            </property>
+         </bean>
+      </mvc:message-converters>
+   </mvc:annotation-driven>
 
 
 </beans>

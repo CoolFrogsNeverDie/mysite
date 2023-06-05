@@ -12,16 +12,18 @@ public class PagingVO {
 	private int boardNumStart; //해당 페이지에서 보여질 게시글의 시작 rownum
 	private int boardNumEnd; //해당 페이지에서 보여질 게시글의 마지막 rownum
 	private int cntPageNum = 10; // 보여질 인덱스 넘버의 수
+	private String keyword;
 	
 	public PagingVO() {}
 
-	public PagingVO(int selectPage, int totalCnt) {
+	public PagingVO(int selectPage, int totalCnt, String keyword) {
 		this.selectPage = selectPage;
 		this.totalCnt = totalCnt;
 		//lastPage
 		calcFinalPage(totalCnt, this.cntPageNum);
 		calcStartEndPage(selectPage,this.cntPageNum);
 		calcStartEnd(selectPage);
+		this.keyword = keyword;
 	}
 	
 	//제일 마지막 페이지
@@ -113,11 +115,23 @@ public class PagingVO {
 		return VIEW_PAGE;
 	}
 
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
 	@Override
 	public String toString() {
 		return "PagingVO [selectPage=" + selectPage + ", startPageNum=" + startPageNum + ", endPageNum=" + endPageNum
 				+ ", totalCnt=" + totalCnt + ", VIEW_PAGE=" + VIEW_PAGE + ", finalPage=" + finalPage
 				+ ", boardNumStart=" + boardNumStart + ", boardNumEnd=" + boardNumEnd + ", cntPageNum=" + cntPageNum
-				+ "]";
+				+ ", keyword=" + keyword + "]";
 	}
+
+	
+	
+	
 }

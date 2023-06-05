@@ -38,8 +38,8 @@ public class BoardDAO {
 
 	//---------------totalBoard cnt
 	
-	public int getTotalCnt() {  
-		int totalCnt  = sqlSession.selectOne("board.getBoardCnt");
+	public int getTotalCnt(String keyword) {  
+		int totalCnt  = sqlSession.selectOne("board.getBoardCnt", keyword);
 		
 		return totalCnt;
 	}

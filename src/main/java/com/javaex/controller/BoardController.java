@@ -26,25 +26,26 @@ public class BoardController {
 	BoardService boardService;
 	
 	
-//	//--------------BoardList----------아무것도 선택하지 않았을 때의 BoardList 삭제 예정
-//	
-//	@RequestMapping(value ="/list" )
-//	public String boardList(Model model) {  
-//		System.out.println("boardList controller");
-//		
-//		List <BoardVO> list = boardService.getBoardList();
-//		model.addAttribute("boardList", list);
-//		return "board/list";
-//	}
-//	
+	//--------------BoardList----------아무것도 선택하지 않았을 때의 BoardList 삭제 예정
+	
+	@RequestMapping(value ="/list2" )
+	public String boardList(Model model) {  
+		System.out.println("boardList controller");
+		
+		List <BoardVO> list = boardService.getBoardList();
+		model.addAttribute("boardList", list);
+		return "board/list";
+	}
+	
 	//--------------BoardListByPageNum --------페이지 선택 시 보이는 BoardList
 	
-	@RequestMapping(value = "/list/{no}")
-	public String boardListByBoardNum(@PathVariable("no") int selectPage, Model model) {  
+	@RequestMapping(value = "/list")
+	public String boardListByBoardNum(@RequestParam("selectPage") int selectPage
+									,@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword, Model model) {
 		
 		
 		//BoardList와 PagingVO 객체를 꺼내올 거임
-		Map<String, Object> pageInfo = boardService.getBoardPagingInfo(selectPage);
+		Map<String, Object> pageInfo = boardService.getBoardPagingInfo(selectPage, keyword);
 		PagingVO vo = (PagingVO) pageInfo.get("pagingVO");
 		System.out.println("넘어온 객체 in controller" +  vo.toString());
 

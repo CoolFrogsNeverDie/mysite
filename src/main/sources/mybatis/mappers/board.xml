@@ -36,6 +36,9 @@
                 				   ,user_no as userNo
             					FROM board a
             					JOIN users b ON a.user_no = b.no
+            					<if test = "#{keyword} != '' ">
+            					where title like '%'|| #{keyword} ||'%'
+            					</if>
             					ORDER BY no desc
         					) a
     				 )		
@@ -45,10 +48,13 @@
 	</select>
 
 
-	<select id="getBoardCnt" resultType="int">
+	<select id="getBoardCnt"  parameterType = "String" resultType="int">
 		select
-			count(rownum)
+			count(*)
 		from board
+		<if test = "${value} != '' ">
+		where title like '%' || ${value} || '%'
+		</if>
 	</select>
 
 	<select id="getBoardByNum" parameterType="int"

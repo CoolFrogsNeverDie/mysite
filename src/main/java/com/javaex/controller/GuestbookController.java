@@ -40,6 +40,8 @@ public class GuestbookController {
 		
 		return "redirect:/Guestbook/guestbookForm";
 	}
+	
+	
 
 	//guestbookdelete, getBook 만들어서 password 가져오기
 	@RequestMapping(value = "/guestbookDeleteForm/{num}")

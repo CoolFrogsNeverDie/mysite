@@ -31,8 +31,8 @@ public class BoardService {
 	
 	//--------------------BoardPagingInfo
 	
-	public Map<String, Object> getBoardPagingInfo(int selectPage){  
-		PagingVO pagingVO = new PagingVO(selectPage,boardDAO.getTotalCnt());
+	public Map<String, Object> getBoardPagingInfo(int selectPage, String keyword){  
+		PagingVO pagingVO = new PagingVO(selectPage,boardDAO.getTotalCnt(keyword),keyword);
 		//paging 객체 생성함
 		//객체 생성자로 알아서 페이징에 필요한 정보들 구성
 		

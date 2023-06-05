@@ -4,6 +4,38 @@
 <!-- 이 공간에 있는 쿼리문들을 호출할 때 이름의 시작 -->
 <mapper namespace="guestbook">
 
+	<insert id ="insertSelectKey" parameterType="com.javaex.vo.GuestbookVO">
+		<selectKey keyProperty ="num" resultType ="int" order ="BEFORE">
+			select seq_guestbook_no.nextval from dual
+		</selectKey>  
+		<![CDATA[
+			insert
+			into guestboard (num, author, write_date, password, content)
+			values(
+				#{num}
+		    	, #{author}
+    			, sysdate
+    			, #{password}
+    			, #{content}
+    		)
+		]]>
+	</insert>
+
+	<select id = "selectByNum"  parameterType = "int" 
+	resultType = "com.javaex.vo.GuestbookVO">
+		<![CDATA[
+			select
+				num
+				,author
+				,write_date as regDate
+				,content 
+			from guestboard
+			where num = #{num}
+		]]> 
+	
+	</select>
+
+
 	<!-- 쿼리문 작성 -->
 	<insert id="insertGuestbook"
 		parameterType="com.javaex.vo.GuestbookVO">
