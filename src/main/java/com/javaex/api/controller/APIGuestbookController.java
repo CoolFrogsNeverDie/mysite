@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,7 +20,51 @@ import com.javaex.vo.JasonResult;
 public class APIGuestbookController {
 	
 	@Autowired
-	GuestbookService guestbookService;
+	private GuestbookService guestbookService;
+	
+	//방명록 첫페이지(ajax)
+	
+	@RequestMapping(value = "/guestbookview2", method = {RequestMethod.GET, RequestMethod.POST})
+	public String addList2() {  
+		
+		System.out.println("오나요!");
+		
+		return "guestbook/addListAjax2";
+	}
+	
+	//ajax 전체리스트 가져오기
+	
+	@ResponseBody
+	@RequestMapping(value = "/list", method = {RequestMethod.GET, RequestMethod.POST})
+	public JasonResult list() {   
+		
+		List<GuestbookVO> list = guestbookService.getGuestbooklist();
+		System.out.println("list in controller" + list);
+		
+		JasonResult jasonResult = new JasonResult();
+		jasonResult.success(list);
+		
+		return jasonResult;
+	}
+	
+	//jason으로 전송 후 등록
+	@ResponseBody
+	@RequestMapping(value = "/guestbookWrite2", method = {RequestMethod.GET, RequestMethod.POST})
+	public JasonResult guestBookWriteAJAX2(@RequestBody GuestbookVO guestbookVO) {
+
+		System.out.println("write2 in controller");
+		System.out.println(guestbookVO);
+		
+		GuestbookVO Guestvo = guestbookService.addGuest(guestbookVO);
+			
+		JasonResult jasonResult = new JasonResult();
+		jasonResult.success(Guestvo);
+		
+		
+		return jasonResult;
+	}
+	
+	
 	
 	//----------------AJAX 를 이용한 guestBookForm
 	
@@ -48,4 +93,23 @@ public class APIGuestbookController {
 			
 		return jasonResult;
 	}
+	
+	
+	//ajax 삭제
+	
+	@ResponseBody
+	@RequestMapping(value = "/guestbookDelete", method = {RequestMethod.GET, RequestMethod.POST})
+	public JasonResult guestbookDelete (@ModelAttribute GuestbookVO guestbookVO) {  
+		JasonResult jasonResult = new JasonResult();
+		
+		System.out.println(guestbookVO);
+
+		int rows = guestbookService.deleteGuestbook(guestbookVO);
+
+		jasonResult.success(rows);
+		
+		return jasonResult;
+	}
+	
+	
 }

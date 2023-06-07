@@ -6,12 +6,20 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link href="${pageContext.request.contextPath}/assets/css/mysite.css"
-	rel="stylesheet" type="text/css">
-<link href="${pageContext.request.contextPath}/assets/css/guestbook.css"
-	rel="stylesheet" type="text/css">
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/assets/js/jquery/jquery-1.12.4.js"></script>
+<!-- css -->
+<link href="${pageContext.request.contextPath}/assets/css/mysite.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/assets/css/guestbook.css" rel="stylesheet" type="text/css">
+<!-- 부트스트랩 css -->	
+<link href="${pageContext.request.contextPath}/assets/bootstrap/css/bootstrap.css" rel = "stylesheet" type="text/css">
+<!-- jquery -->	
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery/jquery-1.12.4.js"></script>
+<!-- 부트스트랩 js -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/bootstrap/js/bootstrap.js"></script>
+<!-- 모달 팝업 전용  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	
+	
+	
 </head>
 
 <body>
@@ -58,11 +66,9 @@
 					<tbody>
 						<tr>
 							<th><label class="form-text" for="input-uname">이름</label>
-							</td>
 							<td><input id="input-uname" type="text" name="author"
 								required></td>
 							<th><label class="form-text" for="input-pass">패스워드</label>
-							</td>
 							<td><input id="input-pass" type="password" name="password"
 								required></td>
 						</tr>
@@ -80,26 +86,29 @@
 				<input type="hidden" name="action" value="add">
 
 				<div id="guestbookArea">
-					<table class="guestRead">
+				
+
+		<c:forEach items="${guestbookList}" var="guestbook">
+					<table id="t${guestbook.num}" class="guestRead">
 						<colgroup>
 							<col style="width: 10%;">
 							<col style="width: 40%;">
 							<col style="width: 40%;">
 							<col style="width: 10%;">
 						</colgroup>
-						<c:forEach items="${guestbookList}" var="guestbook">
 							<tr>
 								<td>${guestbook.num}</td>
 								<td>${guestbook.author}</td>
 								<td>${guestbook.regDate}</td>
-								<td><a
-									href="../Guestbook/guestbookDeleteForm/${guestbook.num}">[삭제]</a></td>
+								<td><button type="button" class="btn btn-danger btn-sm btnModal" data-num ="${guestbook.num}">삭제</button></td>
 							</tr>
 							<tr>
 								<td colspan=4 class="text-left">${guestbook.content}</td>
 							</tr>
-						</c:forEach>
 					</table>
+						</c:forEach>
+
+				
 				</div>
 				<!-- //guestRead -->
 
@@ -125,8 +134,136 @@
 	</div>
 	<!-- //wrap -->
 
+
+<!-- 삭제폼 모달창 ------------------------------------------------------------------------------------------------->
+
+
+<p>모달창 위치</p>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">삭제 모달</h4>
+      </div>
+      <div class="modal-body">
+        삭제를 원하시면 비밀번호를 입력해주세요.<br><br>
+       password: <input type = "password"  id ="modalPassword"/><br><!-- 입력 비밀번호 -->
+       <input type = "text" id ="modalNum" ><!-- 특정할 게스트보드 넘버 -->
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger btn-sm" id = "modalDelete">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 삭제폼 모달창 ------------------------------------------------------------------------------------------------->
+
+
+</body>
+
 	<script type="text/javascript">
-		//방명록 저장 버튼 클릭했을 때~
+		
+	
+
+	
+	//삭제 모달창 호출 버튼 ---> 모달창 뜸!
+	
+	$("#guestbookArea").on("click", ".btnModal" , function(){  
+
+		
+		//초기화
+		$("#modalPassword").val("");
+		$("#modalNum").val("");
+
+		
+		var del_num = $(this).data("num"); //정확한 타게팅을 위해 this를 사용
+		//== 삭제 클릭된 게시물의 data 이름이 num 인 data를 가져옴
+		console.log(del_num)
+		//방명록 글번호를 input창에~~ 꺼내쓰기 이거 꺼내려고 삭제 버튼 태그에 data-num이란 이름으로 추가해서 받아옴
+		//data("num")
+		$("#modalNum").val(del_num);
+		//모달창 호출
+		$("#myModal").modal('show');
+		
+	}); //modal open btn 
+	
+
+	
+	//모달에서 삭제 버튼 클릭하면?
+	$("#modalDelete").on("click", function(){
+		
+		
+		var password  = $("#modalPassword").val()
+		var num  = $("#modalNum").val()
+		
+		console.log(password);
+		console.log(num);
+		
+		var guestbookVO = {
+				password : password,
+				num : num
+			};
+
+			$.ajax({
+
+						//요청 세팅(보낼 때--!)
+						url : "${pageContext.request.contextPath}/api/Guestbook/guestbookDelete",
+						type : "post", //어차피 내부 요청이라 주소창에 안 나온다.
+						//contentType : "application/json",
+						//  ㄴ---> 전송하는 데이터타입 지정 지금은 파라미터로 보내는 거라 사용 X
+						data : guestbookVO,
+						
+						dataType : "json",
+						success : function(result) {
+							
+							if(result.data > 0){  
+								$("#t"+num).remove()
+								$('#myModal').modal('hide')//myModal 닫아주기
+								Swal.fire({
+									  position: 'center',
+									  icon: 'success',
+									  title: '삭제 성공',
+									  showConfirmButton: false,
+									  timer: 3000
+									})
+							}else{ 
+								Swal.fire({
+									  icon: 'error',
+									  title: 'Oops...',
+									  text: '비밀번호가 맞지 않습니다!',
+									})
+									
+									$("#modalPassword").val("");
+							}
+
+						},
+						error : function(XHR, status, error) {
+							console.error(status + " : "
+									+ error);
+						}
+
+					}); //ajax end
+			
+					
+	});  //modal delete button end
+	
+	
+	
+
+	
+	
+	
+	
+	
+	//방명록 저장 버튼 클릭했을 때~
 		$("#insertGuestbook").on("click",function() {
 
 							var author = $("[name='author']").val()
@@ -166,12 +303,15 @@
 										}
 
 									}); //ajax end
+		});//event end		
+									
+									
 									
 									//html 요소를 처리하려고 function으로 뺐다.
 								function render(guestbookVO){
 
 									var str = "";
-									str += "<table class='guestRead'>";
+									str += "<table id = 't"+ guestbookVO.num+"' class='guestRead'>";
 									str += "<colgroup>"
 									str += '<col style="width: 10%;">';
 									str += '<col style="width: 40%;">';
@@ -186,7 +326,7 @@
 											+ "</td>"
 									str += "<td>" + guestbookVO.regDate
 											+ "</td>"
-									str += '<td><a href="../Guestbook/guestbookDeleteForm/${guestbook.num}">[삭제]</a></td>'
+									str += '<td><button type="button" class="btn btn-danger btn-sm btnModal" data-num ="' + guestbookVO.num + '">삭제</button></td>'
 									str += "</tr>"
 
 									str += "<tr>"
@@ -200,9 +340,9 @@
 										
 									}	
 
-						});//event end
+	
+						
+
+						
 	</script>
-
-</body>
-
 </html>
