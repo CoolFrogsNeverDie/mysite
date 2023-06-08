@@ -5,4 +5,3 @@
 		
 		<div id="footer">Copyright ⓒ 2023 김세영. All right reserved</div>
 		<!-- //footer -->
-

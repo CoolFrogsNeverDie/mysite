@@ -65,13 +65,10 @@ public class GalleryController {
 	
 	@RequestMapping(value ="/upload", method = {RequestMethod.GET, RequestMethod.POST})
 	public String galleryUpload(@RequestParam("uploadPicture") MultipartFile file,
-								@RequestParam("content") String content,
-								HttpSession session) {
-		
-		int loginUserNo  = ((UserVO)session.getAttribute("authUser")).getNo(); 
+								@ModelAttribute UploadFileVO uploadFileVO) {
 		
 		
-		int row = galleryService.uploadPic(file,loginUserNo, content);
+		int row = galleryService.uploadPic(file,uploadFileVO);
 		System.out.println("다시 controller로 넘어온 row" + row);
 		
 		return "redirect:/gallery/list";

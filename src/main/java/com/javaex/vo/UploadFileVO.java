@@ -2,14 +2,14 @@ package com.javaex.vo;
 
 public class UploadFileVO {
 
-	private int no;
-	private int userNum;
-	private String userName;
-	private String content;
-	private String filePath;
-	private String orgName;
-	private String saveName;
-	private long fileSize;
+	private int no; //Post No
+	private int userNum; //글쓴이 넘버
+	private String userName; //글쓴이 이름
+	private String content; // 컨텐츠
+	private String filePath; //파일주소
+	private String orgName; //org 이름
+	private String saveName; //sava된 이름
+	private long fileSize; //파일 사이즈
 	
 	public UploadFileVO() {
 		super();

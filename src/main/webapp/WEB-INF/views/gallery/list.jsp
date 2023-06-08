@@ -20,7 +20,8 @@
 
 <body>
 	<div id="wrap">
-
+	
+		<!-- header -->
 		<c:import url="/WEB-INF/views/include/header.jsp"></c:import>
 		<!-- //header -->
 
@@ -51,10 +52,13 @@
 
 			<div id="gallery">
 				<div id="list">
-
+				
+					<!-- 이미지 업로드 (로그인 안 되어 있을 시 노출 X) -->
 						<c:if test ="${authUser != null}">
 					<button id="btnImgUpload">이미지올리기</button>
 						</c:if>
+					<!-- //이미지 업로드 (로그인 안 되어 있을 시 노출 X) -->
+					
 					<div class="clear"></div>
 
 
@@ -63,7 +67,7 @@
 						<!-- 이미지반복영역 -->
 						<c:forEach items ="${list}" var = "gallery" >
 						<li>
-							<div class="view" data-img ="${gallery.saveName}" data-writernum ="${gallery.userNum}" data-postnum ="${gallery.no}" id ="p${gallery.no}">							
+							<div class="view" data-img ="${gallery.saveName}" data-writernum ="${gallery.userNum}" data-user="${authUser.no}" data-postnum ="${gallery.no}" id ="p${gallery.no}">							
 								<img class ="imgItem" src="${pageContext.request.contextPath}/upload/${gallery.saveName}" name = "fileName">
 								<div class="imgWriter">
 									작성자: <strong>${gallery.userName}</strong>
@@ -112,6 +116,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
+					<input type="text" value = "${authUser.no}" name ="userNum">
 						<button type="submit" class="btn" id="btnUpload">등록</button>
 					</div>
 				</form>
@@ -150,7 +155,8 @@
 				</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-						<button type="button" class="btn btn-danger" id="btnDel" data-postnum ="" >삭제</button>
+						<input type ="hidden" id = "del_num">
+						<button type="button" class="btn btn-danger" id="btnDel">삭제</button>
 					</div>
 			</div>
 			<!-- /.modal-content -->
@@ -164,45 +170,56 @@
 
 <script type="text/javascript">
 	
-	//이미지 올리기 모달 버튼 클릭 시
+	//이미지 올리기 모달 버튼 클릭 시  ---> 해당 기능은 form 으로 처리
 	$('#btnImgUpload').on("click", function(){
-		
-		
+		//입력창 초기화
 		$('#addModalContent').val("")
 		$('#file').val("")
+		//이미지 올리기 모달 show
 		$('#addModal').modal('show')
 	
 	})
 	
 	
+	//------------------------------------------------------------------
+	
 	
 	//사진 보기 모달 버튼 클릭 시
 	$( ".view").on("click", function(){ 
-		  var saveName = $(this).data("img"); // saveName 가져오기
-		  var writerNum = $(this).data("writernum"); // 작성자 번호 가져오기
-		  var postNum = $(this).data("postnum"); // 게시물 번호 가져오기
+		  var saveName = $(this).data("img"); // saveName 가져오기 --> 주소 불러오려고
+		  var writerNum = $(this).data("writernum"); // 작성자 번호 가져오기 --> 삭제 시 대조하려고.
+		  var postNum = $(this).data("postnum"); // 게시물 번호 가져오기 --> 삭제할 때 쓰려고
+		  var LoginUNum = $(this).data("user"); // 로그인한 유저 넘버
 		  
-		  $("#btnDel").attr("data-postnum",postNum);
+		  $("#del_num").val(postNum); //삭제용 포스트 넘버 넘김
 		  
+		  if(writerNum != LoginUNum){ 
+			$("#btnDel").css("display", "none");
+		  }
+		  
+		  //test
 		console.log(saveName)
 		console.log(writerNum)
 		console.log(postNum)
 		
+		// 이미지 주소
 		var url = "${pageContext.request.contextPath}/upload/" + saveName
 		
 		
-		$('#viewModelImg').attr("src",url)
-		$('#viewModal').modal('show')
-
+		$('#viewModelImg').attr("src",url) //주소 속성 추가
+		$('#viewModal').modal('show') //사진 보기 모달 show
 		
-	})
+	});
+	
+	
+	//--------------------------------------------------------------------
 	
 	//사진 보기 모달 버튼에서 [삭제] 버튼 클릭 시	
 	$('#btnDel').on("click", function(){ 
-		
+		$("#btnDel").css("display", "block");
 		console.log('postnum 확인용' + $(this).data("postnum"))
 		
-		var no = $(this).data("postnum");
+		var no = $("#del_num").val();
 		
 		var uploadFileVO = {  
 			no : no
@@ -223,6 +240,7 @@
 				console.log('삭제하고 왔습니다.' + result.data)
 				$('#viewModal').modal('hide')
 				$('#p'+no).remove();
+				$("#del_num").val("");
 			},
 			error : function(XHR, status, error) {
 				console.error(status + " : "
