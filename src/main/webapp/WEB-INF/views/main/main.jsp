@@ -33,8 +33,7 @@
 
 			<div id="index">
 
-				<img id="profile-img" src="${pageContext.request.contextPath}/assets/image/Animal.jpg"
-					name="귀여운 쿼카">
+				<img id="profile-img" src="${pageContext.request.contextPath}/pictures/hamster.jpeg" name="귀여운 쿼카">
 
 				<div id="greetings">
 					<p class="text-xlarge">

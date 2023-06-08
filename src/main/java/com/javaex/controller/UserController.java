@@ -72,6 +72,7 @@ public class UserController {
 			return "redirect:/user/loginForm?result=fail";			 			
 		}else {  
 			session.setAttribute("authUser", authUser);
+			session.setMaxInactiveInterval(6000);
 			return "redirect:/main";
 		}
 	}

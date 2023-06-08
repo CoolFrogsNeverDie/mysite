@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 이 공간에 있는 쿼리문들을 호출할 때 이름의 시작 -->
+<mapper namespace="gallery">
+	<insert id = "insertPhoto" parameterType = "com.javaex.vo.UploadFileVO">
+		insert into gallery 
+			(no, user_no, content, filePath, orgName, saveName, fileSize) 
+			values (
+					seq_gallery_no.nextval
+					,#{userNum}
+					,#{content}
+					,#{filePath}
+					,#{orgName}
+					,#{saveName}
+					,#{fileSize}
+					)
+	</insert>
+	
+	<select id ="getGalleryList" resultType = "com.javaex.vo.UploadFileVO">
+	<![CDATA[
+	
+		select 
+			  a.no as no
+            , b.name as userName
+			, a.user_no as  userNum
+			, a.content as content
+			, a.filePath as filePath
+			, a.orgName as orgName
+			, a.saveName as saveName
+			, a.fileSize as fileSize
+		from gallery a join  users b
+        on a.user_no = b.no
+        order by no desc
+        ]]>
+	</select>
+	
+	
+	<delete id="deletePost" parameterType = "com.javaex.vo.UploadFileVO">
+		<![CDATA[
+			delete gallery 
+				where no = #{no}
+		]]>
+	</delete>
+	
+</mapper>
