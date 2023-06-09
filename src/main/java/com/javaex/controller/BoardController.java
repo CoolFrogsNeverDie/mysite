@@ -26,6 +26,23 @@ public class BoardController {
 	BoardService boardService;
 	
 	
+	//--------------BoardPaging(수업시간)---------------------------------------
+	
+	@RequestMapping(value = "/listPaging")
+	public String boardListByBoardNum(
+						@RequestParam( value = "page", required = false, defaultValue ="1") int crtPage, 
+						Model model) {
+		
+		Map<String, Object> pMap = boardService.getPagingBoard(crtPage);
+		//BoardList와 PagingVO 객체를 꺼내올 거임
+		
+		
+		model.addAttribute("pMap", pMap);
+		
+		return "board/list3";
+	}
+
+	
 	//--------------BoardList----------아무것도 선택하지 않았을 때의 BoardList 삭제 예정
 	
 	@RequestMapping(value ="/list2" )
@@ -39,21 +56,21 @@ public class BoardController {
 	
 	//--------------BoardListByPageNum --------페이지 선택 시 보이는 BoardList
 	
-	@RequestMapping(value = "/list")
-	public String boardListByBoardNum(@RequestParam("selectPage") int selectPage
-									,@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword, Model model) {
-		
-		
-		//BoardList와 PagingVO 객체를 꺼내올 거임
-		Map<String, Object> pageInfo = boardService.getBoardPagingInfo(selectPage, keyword);
-		PagingVO vo = (PagingVO) pageInfo.get("pagingVO");
-		System.out.println("넘어온 객체 in controller" +  vo.toString());
-
-		model.addAttribute("paging", vo);
-		model.addAttribute("boardList", pageInfo.get("BoardList"));
-		
-		return "board/list";
-	}
+//	@RequestMapping(value = "/list")
+//	public String boardListByBoardNum(@RequestParam("selectPage") int selectPage
+//									,@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword, Model model) {
+//		
+//		
+//		//BoardList와 PagingVO 객체를 꺼내올 거임
+//		Map<String, Object> pageInfo = boardService.getBoardPagingInfo(selectPage, keyword);
+//		PagingVO vo = (PagingVO) pageInfo.get("pagingVO");
+//		System.out.println("넘어온 객체 in controller" +  vo.toString());
+//
+//		model.addAttribute("paging", vo);
+//		model.addAttribute("boardList", pageInfo.get("BoardList"));
+//		
+//		return "board/list";
+//	}
 	
 	//--------------readBoard(목록에서 Board 하나 골라서 선택)-------------------
 	
@@ -113,9 +130,12 @@ public class BoardController {
 	public String insert(HttpSession session,@ModelAttribute BoardVO boardVO) {
 		UserVO userVO = (UserVO) session.getAttribute("authUser"); 
 		boardVO.setUserNo(userVO.getNo());
-		boardService.writeBoard(boardVO);
+		
+			boardService.writeBoard(boardVO);
+
 		System.out.println(boardVO);
 		System.out.println("write Controller!");
+		
 		return "redirect:/board/list/1";
 	}
 	
