@@ -49,6 +49,16 @@ public class BoardController {
 		return "board/list";
 	}
 	
+	//--------------------searchBoardByKeywordByPageNum(no searchOption)------------ 
+	
+	@RequestMapping(value = "/search")
+	public String searchBoard(@RequestParam("keyword") String keyword, Model model){ 
+		System.out.println("검색 :" + keyword);
+		List<BoardVO> searchBoard = boardService.searchBoard(keyword);
+		model.addAttribute("boardList", searchBoard);
+		return "board/list/1";
+	}
+
 	//--------------readBoard(목록에서 Board 하나 골라서 선택)-------------------
 	
 	@RequestMapping(value = "/readBoard/{no}")
@@ -129,14 +139,5 @@ public class BoardController {
 		return "redirect:/board/list/1";
 	}
 	
-	//--------------------searchBoardByKeyword(no searchOption)------------ 
-	
-	@RequestMapping(value = "/search")
-	public String searchBoard(@RequestParam("keyword") String keyword, Model model){ 
-		System.out.println("검색 :" + keyword);
-		List<BoardVO> searchBoard = boardService.searchBoard(keyword);
-		model.addAttribute("boardList", searchBoard);
-		return "board/list/1";
-	}
 	
 }
