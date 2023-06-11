@@ -32,10 +32,10 @@ public class BoardService {
 		//////////////////////////////////////////////////////////////
 		
 		//페이지당 글 갯수
-		int listCnt = 10;
+		int listCnt = 5;
 		
 		//rownum 시작글 번호, 끝 번호
-		int startRnum = (crtPage -1)*10+1;
+		int startRnum = (crtPage -1)*listCnt+1;
 		int endRnum = (startRnum+listCnt)-1;
 		
 		Map<String, Object> pagingInfo = new HashMap<>();

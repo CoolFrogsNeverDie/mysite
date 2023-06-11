@@ -33,8 +33,7 @@ public class APIGuestbookController {
 	}
 	
 	//ajax 전체리스트 가져오기
-	
-	@ResponseBody
+
 	@RequestMapping(value = "/list", method = {RequestMethod.GET, RequestMethod.POST})
 	public JasonResult list() {   
 		
