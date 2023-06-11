@@ -9,8 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.javaex.service.UserService;
+import com.javaex.vo.JasonResult;
 import com.javaex.vo.UserVO;
 
 @Controller
@@ -46,6 +49,7 @@ public class UserController {
 			 return "redirect:/user/joinForm";
 		 }	 
 	}
+	
 
 	//------------------user loginForm ----------------------------------------------
 	
@@ -68,6 +72,7 @@ public class UserController {
 			return "redirect:/user/loginForm?result=fail";			 			
 		}else {  
 			session.setAttribute("authUser", authUser);
+			session.setMaxInactiveInterval(6000);
 			return "redirect:/main";
 		}
 	}
@@ -114,6 +119,37 @@ public class UserController {
 	}
 	
 	
+	//----------------아이디 중복체크
+	
+	//해당 메서드가 HTTP응답의 본문(Body)에 직접 데이터를 작성하여 반환한다는 뜻임
+	//view resolver를 통하지 않음
+	@ResponseBody
+	@RequestMapping(value = "/checkId", method = RequestMethod.POST )
+	public JasonResult idCheck(@RequestParam("id") String inputId) {
+
+		
+		boolean data = userService.checkId(inputId);
+		
+		JasonResult jasonResult = new JasonResult();
+		
+		jasonResult.success(data);
+//		jasonResult.fail("통신오류");
+
+		/*
+		 * getter setter 사용한 경우 ---> 잘못 사용할 가능성이 높다.
+		 * 
+		jasonResult.setResult("success");
+		jasonResult.setData(data);
+
+		jasonResult.setResult("fail");
+		jasonResult.setFailMsg("통신오류");
+		 */
+
+		
+		System.out.println("controller오 넘어온" + jasonResult);
+		
+		return jasonResult;
+	}
 	
 	
 }

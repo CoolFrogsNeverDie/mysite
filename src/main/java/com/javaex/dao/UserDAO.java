@@ -34,4 +34,9 @@ public class UserDAO {
 		UserVO vo = sqlSession.selectOne("user.getUserInfoByNum", num);
 		return vo;
 	}
+	
+	public UserVO getUserById(String id) {   
+		UserVO vo = sqlSession.selectOne("user.getUserById",id);
+		return vo;		
+	}
 }

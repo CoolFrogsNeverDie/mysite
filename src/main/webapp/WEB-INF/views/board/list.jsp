@@ -21,14 +21,7 @@
 		<!-- //header -->
 		<c:import url="/WEB-INF/views/include/nav.jsp" />
 		<!-- //nav -->
-
-		<div id="aside">
-			<h2>게시판</h2>
-			<ul>
-				<li><a href="">일반게시판</a></li>
-				<li><a href="">댓글게시판</a></li>
-			</ul>
-		</div>
+		<c:import url="/WEB-INF/views/include/aside.jsp" />
 		<!-- //aside -->
 
 		<div id="content">
@@ -48,9 +41,10 @@
 
 			<div id="board">
 				<div id="list">
-					<form action="${pageContext.request.contextPath}/board/search">
+					<form action="${pageContext.request.contextPath}/board/list">
 						<div class="form-group text-right">
-							<input type="text" name="keyword">
+							<input type="text" name="selectPage" value="1" hidden> <input
+								type="text" name="keyword">
 							<button type="submit" id=btn_search>검색</button>
 						</div>
 					</form>
@@ -83,15 +77,35 @@
 						</tbody>
 					</table>
 
+
+
 					<div id="paging">
 						<ul>
-							<li><a href="${pageContext.request.contextPath}/board/list/${pagingInfo.oldPage}">◀</a></li>
-							<c:forEach items="${pagingInfo.page}" var="num">
-								<c:if test = "${num <=  pagingInfo.finalPage}">
-									<li><a href="${pageContext.request.contextPath}/board/list/${num}">${num}</a></li>
-								</c:if>
-							</c:forEach>
-							<li><a href="${pageContext.request.contextPath}/board/list/${pagingInfo.nextPage}">▶</a></li>
+
+							<li><c:if test="${paging.startPageNum != 1 }">
+									<!-- 시작 페이지가 1이 아니면 -->
+									<a
+										href="${pageContext.request.contextPath}/board/list/${paging.startPageNum-1}">◀</a>
+								</c:if> <!-- 보여질 시작페이지값부터 끝페이지 값까지 'p'로 반복하게 --> <c:forEach
+									begin="${paging.startPageNum}" end="${paging.endPageNum}"
+									var="p">
+									<c:choose>
+										<c:when test="${p == paging.selectPage}">
+											<li><b>${p }</b></li>
+										</c:when>
+										<c:when test="${p != paging.selectPage}">
+											<li><a
+												href="${pageContext.request.contextPath}/board/list?selectPage=${p}">${p}</a>
+											</li>
+										</c:when>
+									</c:choose>
+								</c:forEach></li>
+
+							<c:if test="${paging.endPageNum != paging.finalPage}">
+								<li><a
+									href="${pageContext.request.contextPath}/board/list/${paging.endPageNum+1 }">▶</a>
+								</li>
+							</c:if>
 						</ul>
 
 

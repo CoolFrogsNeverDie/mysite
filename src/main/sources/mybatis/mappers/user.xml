@@ -48,4 +48,14 @@
 		]]>
 	
 	</select>
+	
+	<select id = "getUserById" parameterType = "String" resultType ="com.javaex.vo.UserVO">
+		select
+			no
+			,id
+		from users
+		where id = '${value}'
+	</select>
+	
+	
 </mapper>

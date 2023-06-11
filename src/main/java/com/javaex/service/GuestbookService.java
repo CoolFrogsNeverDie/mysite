@@ -14,6 +14,20 @@ public class GuestbookService {
 	@Autowired
 	GuestbookDAO guestbookDAO;
 	
+	//------AJAX 방명록에서 사용!
+	
+	public GuestbookVO addGuest(GuestbookVO guestbookVO) {   
+		System.out.println("addGuest in Service");
+		System.out.println(guestbookVO);
+			guestbookDAO.insertGuest(guestbookVO);  
+			//insert + 매개변수로 활용되던 guestbookVO에 no 추가
+			int insertGuestNum = guestbookVO.getNum();
+			//guestbook에 추가된 no로 방명록 찾아오기
+			GuestbookVO guestbookvo = guestbookDAO.selectGuestBookByNum(insertGuestNum);	
+		
+		return guestbookvo;
+	}
+	
 	
 	//----------방명록 불러오기
 	

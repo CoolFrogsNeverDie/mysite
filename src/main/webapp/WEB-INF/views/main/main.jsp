@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="${pageContext.request.contextPath}/assets/css/mysite.css" rel="stylesheet"
@@ -32,8 +33,7 @@
 
 			<div id="index">
 
-				<img id="profile-img" src="${pageContext.request.contextPath}/assets/image/Animal.jpg"
-					name="귀여운 쿼카">
+				<img id="profile-img" src="${pageContext.request.contextPath}/upload/hamster.jpg" name="귀여운 쿼카">
 
 				<div id="greetings">
 					<p class="text-xlarge">

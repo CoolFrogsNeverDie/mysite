@@ -4,14 +4,82 @@
 <!-- 이 공간에 있는 쿼리문들을 호출할 때 이름의 시작 -->
 <mapper namespace="board">
 
+	<select id="selectList3" parameterType="map"
+		resultType="com.javaex.vo.BoardVO">
+		<![CDATA[
+		select  ort.rn,
+    		    ort.no,
+        		ort.title,
+ 		        ort.content,
+    		    ort.hit,
+ 		        ort.reg_date regDate,
+       		    ort.user_no,
+    	        ort.name
+		 from (select  rownum rn,
+    		          ot.no,
+            		  ot.title,
+         		      ot.content,
+              		  ot.hit,
+           			  ot.reg_date,
+                	  ot.user_no,
+              		  ot.name
+     		from (select  b.no,
+            		       b.title,
+                		   b.content,
+                		   b.hit,
+               			   b.reg_date,
+                   		   b.user_no,
+                           u.name
+          			 from board b, users u
+          			 where b.user_no = u.no
+          			 ]]>
+       			<if test=" keyword != '' ">
+        		and b.title like '%' || #{keyword} || '%'
+        		</if>
+        		<![CDATA[
+           			 order by no desc) ot
+    		 )ort
+		where rn>=#{startRnum}
+		and rn<=#{endRnum}
+		]]>
+	</select>
+
+
+	<select id="pagingBoard" resultType="com.javaex.vo.BoardVO">
+		<![CDATA[
+	SELECT b.no, 
+             b.title as title, 
+             u.name as name, 
+             b.hit as hit, 
+             b.reg_date as regDate, 
+             b.user_no as userNo, 
+             b.content as content
+      FROM (
+            SELECT rownum as rn, 
+                   b.no, 
+                   b.title, 
+                   b.content , 
+                   b.user_no,
+                   b.reg_date ,
+                   b.hit
+            FROM board b JOIN users u ON b.user_no = u.no
+              where rownum between 1 and 10 and title like '%8%'
+              ORDER BY b.no DESC ) b, users u
+          WHERE b.user_no = u.no
+          ORDER BY b.no DESC
+		]]>
+
+	</select>
+
+
 	<select id="getBoardList" resultType="com.javaex.vo.BoardVO">
 		SELECT
-			a.no as no
-			,title
-			,name
-			,hit
-			,reg_date as regDate
-			,user_no as userNo
+		a.no as no
+		,title
+		,name
+		,hit
+		,reg_date as regDate
+		,user_no as userNo
 		FROM board a
 		JOIN users b
 		ON a.user_no = b.no
@@ -21,94 +89,104 @@
 	<select id="getBoardListByNum"
 		parameterType="com.javaex.vo.PagingVO"
 		resultType="com.javaex.vo.BoardVO">
-			SELECT rw, no, title
-			FROM (
-    			SELECT rw, no, title
-   				FROM (
-        			SELECT rownum as rw, a.no as no, title
-        				FROM (
-            					SELECT
-             					   a.no as no
-               					   ,title
-                				   ,name
-                				   ,hit
-               					   ,reg_date as regDate
-                				   ,user_no as userNo
-            					FROM board a
-            					JOIN users b ON a.user_no = b.no
-            					ORDER BY no
-        					) a
-    				 )		
-    				WHERE rw BETWEEN #{BoardNumEnd} AND #{BoardNumStart}
-				)
-			ORDER BY rw DESC
+		SELECT no, title, name, hit, regDate
+		FROM (
+		SELECT rw, no, title, name, hit, regDate
+		FROM (
+		SELECT rownum as rw, a.no as no, title, name, hit, regDate
+		FROM (
+		SELECT
+		a.no as no
+		,title
+		,name
+		,hit
+		,reg_date as regDate
+		,user_no as userNo
+		FROM board a
+		JOIN users b ON a.user_no = b.no
+		<if test="#{keyword} != '' ">
+			where title like '%'|| #{keyword} ||'%'
+		</if>
+		ORDER BY no desc
+		) a
+		)
+		WHERE rw BETWEEN #{boardNumStart} AND #{boardNumEnd}
+		)
+		ORDER BY no desc
 	</select>
 
 
-	<select id="getBoardCnt" resultType="int">
-		select
-			count(rownum)
-		from board
-	</select>
+<select id="getBoardCnt" parameterType="String" resultType="int">
+    <![CDATA[
+        select count(*)
+        from board
+        ]]>
+        <if test=" value != '' ">
+        where title like '%'||#{keyword}||'%'
+        </if>
+</select>
 
 	<select id="getBoardByNum" parameterType="int"
 		resultType="com.javaex.vo.BoardVO">
 		select a.no as no
-			, title
-			, content
-			, hit
-			, reg_date regDate
-			, user_no as userNo
-			, name
+		, title
+		, content
+		, hit
+		, reg_date regDate
+		, user_no as userNo
+		, name
 		from board a
 		JOIN users b
 		on a.user_no = b.no
-		where a.no = #{boardNum}
+		where a.no =
+		#{boardNum}
 	</select>
 
 	<select id="selectByTitle" parameterType="String"
 		resultType="com.javaex.vo.BoardVO">
 		SELECT
-			a.no as no
-			,title
-			,name
-			,hit
-			,reg_date as regDate
-			,user_no as userNo
+		a.no as no
+		,title
+		,name
+		,hit
+		,reg_date as regDate
+		,user_no as userNo
 		FROM
 		board
 		a
 		JOIN users b ON a.user_no = b.no
-		where title like '%${value}%'
+		where title like
+		'%'|| #{keyword} ||'%'
 		order by no desc
 	</select>
 
 	<update id="hitCnt" parameterType="int">
 		update board set
-			hit = hit + 1
+		hit = hit + 1
 		where no = #{no}
 	</update>
 
 
 	<update id="updateBoard" parameterType="com.javaex.vo.BoardVO">
 		update board set
-			title = #{title}
-			,content = #{content}
+		title = #{title}
+		,content = #{content}
 		where no = #{no}
 	</update>
 
 	<insert id="insertBoard" parameterType="com.javaex.vo.BoardVO">
 		insert into board (no,
 		title, content, user_no)
-			values (seq_board_no.nextval
-			,#{title}
-			,#{content}
-			,#{userNo})
+		values (seq_board_no.nextval
+		,#{title}
+		,#{content}
+		,#{userNo})
 	</insert>
 
 	<delete id="deleteBoard" parameterType="int">
 		delete board
-		where no = #{no}
+		where no =
+		#{no}
 	</delete>
 
 

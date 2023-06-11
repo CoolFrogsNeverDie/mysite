@@ -42,4 +42,18 @@ public class UserService {
 		UserVO vo = userDAO.getUserInfoByNum(num);
 		return vo;
 	}
+	
+	public boolean checkId(String inputId) {
+		
+		boolean result = true;
+		
+		UserVO vo = userDAO.getUserById(inputId);
+		System.out.println("Service로 넘어온 bo" + vo);
+		
+		if(vo != null) {  
+			result = false;
+		}
+		
+		return result;
+	}
 }
